@@ -3,23 +3,19 @@
 const calendar = document.querySelector('#calendar');
 
 function calendarTable(year, month, element) {
-  const currentMonth = month - 1;
-  const date = new Date(year, currentMonth);
+  const date = new Date(year, month, 0);
+  const maxDays = date.getDate();
+
+  date.setDate(1);
+
   const firstDay = date.getDay() === 0 ? 7 : date.getDay();
-  let maxDays = 31;
-
-  date.setDate(31);
-
-  if (date.getMonth() !== currentMonth) {
-    maxDays = 31 - date.getDate();
-  }
 
   const table = document.createElement('table');
   const tbody = document.createElement('tbody');
 
   tbody.className = 'tbody';
 
-  calendar.append(table);
+  element.append(table);
   table.append(tbody);
 
   const daysAtWeek = 7;
