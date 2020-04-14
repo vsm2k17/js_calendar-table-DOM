@@ -3,103 +3,56 @@
 const calendar = document.querySelector('#calendar');
 
 function calendarTable(year, month, element) {
-  const date = new Date(year, month);
+  const realMonth = month - 1;
+  const date = new Date(year, realMonth);
   const firstDay = date.getDay() === 0 ? 7 : date.getDay();
-  let maxDays;
+  let maxDays = 31;
 
   date.setDate(31);
 
-  if (date.getMonth() !== month) {
+  if (date.getMonth() !== realMonth) {
     maxDays = 31 - date.getDate();
   }
 
-  element.innerHTML
-  = `
-  <table>
-    <tbody id='mainTable'>
-    <tr>
-      <th>ПН</th>
-      <th>ВТ</th>
-      <th>СР</th>
-      <th>ЧТ</th>
-      <th>ПТ</th>
-      <th>СБ</th>
-      <th>ВС</th>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    </tbody>
-  </table>`;
+  const table = document.createElement('table');
+  const tbody = document.createElement('tbody');
 
-  const table = document.getElementById('mainTable');
+  tbody.className = 'tbody';
+
+  calendar.append(table);
+  table.append(tbody);
+
   let counter = 1;
 
-  for (let j = firstDay - 1; j < 7; j++) {
-    table.rows[1].cells[j].innerHTML = counter;
-    counter++;
-  }
+  for (let i = 0; counter <= maxDays; i++) {
+    tbody.append(document.createElement('tr'));
 
-  for (let i = 2; i < 6; i++) {
     for (let j = 0; j < 7; j++) {
-      table.rows[i].cells[j].innerHTML = counter;
-      counter++;
+      if (i === 0) {
+        tbody.rows[i].prepend(document.createElement('th'));
+      } else {
+        tbody.rows[i].append(document.createElement('td'));
+      }
 
-      if (counter > maxDays) {
-        break;
+      if (i === 1 && j >= firstDay - 1) {
+        table.rows[i].cells[j].textContent = counter;
+        counter++;
+      }
+
+      if (i >= 2 && counter <= maxDays) {
+        table.rows[i].cells[j].innerHTML = counter;
+        counter++;
       }
     }
-
-    if (counter > maxDays) {
-      break;
-    }
   }
 
-  if (!table.rows[5].cells[0].innerHTML) {
-    table.lastElementChild.innerHTML = '';
-  };
+  tbody.rows[0].cells[0].textContent = 'ПН';
+  tbody.rows[0].cells[1].textContent = 'ВТ';
+  tbody.rows[0].cells[2].textContent = 'СР';
+  tbody.rows[0].cells[3].textContent = 'ЧТ';
+  tbody.rows[0].cells[4].textContent = 'ПТ';
+  tbody.rows[0].cells[5].textContent = 'СБ';
+  tbody.rows[0].cells[6].textContent = 'ВС';
 }
 
 calendarTable(2019, 10, calendar);
